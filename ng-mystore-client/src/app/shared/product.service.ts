@@ -10,7 +10,7 @@ import { Product } from './product';
   providedIn: 'root'
 })
 export class ProductService {
-  private productsUrl = 'http://localhost:8000/products';
+  private productsUrl = 'https://ng-mystore-server.herokuapp.com/products';
 
   constructor(private http: HttpClient) { }
 
