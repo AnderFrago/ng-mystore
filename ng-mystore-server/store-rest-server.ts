@@ -52,7 +52,7 @@ let Product = mongoose.model('products', contactSchema);
 
 
 app.use(function (req: any, res: any, next: any) {
-  res.header("Access-Control-Allow-Origin", "https://ng-mystore-client.web.app/"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "https://ng-mystore-client.web.app"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
