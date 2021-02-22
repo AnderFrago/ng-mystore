@@ -80,7 +80,15 @@ app.get('/products', async (req:any, res:any) => {
 
 
 app.post('/products', async (req:any, res:any) => {
-  const product = new Product(req.body);
+  const product = new Product({
+		title: req.body.title,
+		price: req.body.price,
+    rating: req.body.rating,
+		shortDescription: req.body.shortDescription,
+    description: req.body.description,
+    categories: req.body.categories,
+		images: req.body.images,
+	});
 
   try {
     await product.save();

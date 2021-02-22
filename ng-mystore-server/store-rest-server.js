@@ -116,7 +116,15 @@ app.post('/products', function (req, res) { return __awaiter(void 0, void 0, voi
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                product = new Product(req.body);
+                product = new Product({
+                    title: req.body.title,
+                    price: req.body.price,
+                    rating: req.body.rating,
+                    shortDescription: req.body.shortDescription,
+                    description: req.body.description,
+                    categories: req.body.categories,
+                    images: req.body.images,
+                });
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, , 4]);
