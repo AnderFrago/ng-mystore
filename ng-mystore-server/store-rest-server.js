@@ -147,7 +147,7 @@ app.delete('/product/:id', function (req, res) { return __awaiter(void 0, void 0
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Product.findByIdAndDelete(req.params.id)];
+                return [4 /*yield*/, Product.findByIdAndDelete(req.params._id)];
             case 1:
                 product = _a.sent();
                 if (!product)
@@ -168,7 +168,7 @@ app.patch('/product/:id', function (req, res) { return __awaiter(void 0, void 0,
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, Product.findByIdAndUpdate(req.params.id, req.body)];
+                return [4 /*yield*/, Product.findByIdAndUpdate(req.params._id, req.body)];
             case 1:
                 product = _a.sent();
                 return [4 /*yield*/, Product.save()];

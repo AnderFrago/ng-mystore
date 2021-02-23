@@ -98,9 +98,9 @@ app.post('/products', async (req:any, res:any) => {
   }
 });
 
-app.delete('/product/:id', async (req:any, res:any) => {
+app.delete('/products/:id', async (req:any, res:any) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params.id)
+    const product = await Product.findByIdAndDelete(req.params._id)
 
     if (!product) res.status(404).send("No item found")
     res.status(200).send()
@@ -109,9 +109,9 @@ app.delete('/product/:id', async (req:any, res:any) => {
   }
 });
 
-app.patch('/product/:id', async (req:any, res:any)=> {
+app.patch('/products/:id', async (req:any, res:any)=> {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body)
+    const product = await Product.findByIdAndUpdate(req.params._id, req.body)
     await Product.save()
     res.send(product)
   } catch (err) {
