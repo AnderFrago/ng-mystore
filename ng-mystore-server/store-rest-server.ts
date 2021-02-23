@@ -53,7 +53,7 @@ let Product = mongoose.model('products', contactSchema);
 
 app.use(function (req: any, res: any, next: any) {
   res.header("Access-Control-Allow-Origin", "https://ng-mystore-client.web.app"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE");
+  res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE,OPTIONS');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
@@ -100,7 +100,7 @@ app.post('/products', async (req:any, res:any) => {
 
 app.delete('/products/:id', async (req:any, res:any) => {
   try {
-    const product = await Product.findByIdAndDelete(req.params._id)
+    const product = await Product.findByIdAndDelete(req.params.id)
 
     if (!product) res.status(404).send("No item found")
     res.status(200).send()
@@ -109,9 +109,9 @@ app.delete('/products/:id', async (req:any, res:any) => {
   }
 });
 
-app.patch('/products/:id', async (req:any, res:any)=> {
+app.put('/products/:id', async (req:any, res:any)=> {
   try {
-    const product = await Product.findByIdAndUpdate(req.params._id, req.body)
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body)
     await Product.save()
     res.send(product)
   } catch (err) {

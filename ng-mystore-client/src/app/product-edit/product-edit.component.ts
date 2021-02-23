@@ -14,7 +14,7 @@ export class ProductEditComponent implements OnInit{
   errorMessage: string;
   productForm: FormGroup;
 
-  prodId:number;
+  prodId:string;
   product: Product;
 
   constructor(private fb: FormBuilder,
@@ -36,16 +36,20 @@ export class ProductEditComponent implements OnInit{
     });
 
     // Read the product Id from the route parameter
-    this.prodId = parseInt(this.activatedroute.snapshot.params['id']);
+    this.prodId = this.activatedroute.snapshot.params['id'];
     this.getProduct(this.prodId);
   }
 
-  getProduct(id: number): void {
-    this.productService.getProductById(id)
-      .subscribe(
-        (product: Product) => this.displayProduct(product),
-        (error: any) => this.errorMessage = <any>error
-      );
+  getProduct(id: string): void {
+    this.productService.getProducts()
+       .subscribe(
+         (products: Product[]) => {
+           let p = products.filter(data => data._id == this.prodId)
+          this.displayProduct(p[0])
+
+         },
+         (error: any) => this.errorMessage = <any>error
+       );
   }
 
   displayProduct(product: Product): void {
@@ -68,12 +72,12 @@ export class ProductEditComponent implements OnInit{
   }
 
   deleteProduct(): void {
-    if (this.product.id === 0) {
+    if (this.product._id === "0") {
       // Don't delete, it was never saved.
       this.onSaveComplete();
     } else {
       if (confirm(`Really delete the product: ${this.product.title}?`)) {
-        this.productService.deleteProduct(this.product.id)
+        this.productService.deleteProduct(this.product._id)
           .subscribe(
             () => this.onSaveComplete(),
             (error: any) => this.errorMessage = <any>error
@@ -87,7 +91,7 @@ export class ProductEditComponent implements OnInit{
     if (this.productForm.valid) {
       if (this.productForm.dirty) {
         this.product = this.productForm.value;
-        this.product.id = this.prodId;
+        this.product._id = this.prodId;
         
         this.productService.updateProduct(this.product)
         .subscribe(

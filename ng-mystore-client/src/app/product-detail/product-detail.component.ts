@@ -11,12 +11,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class ProductDetailComponent implements OnInit {
 
   product: Product;
-  prodId: number;
+  prodId: string;
 
   constructor(private activatedroute: ActivatedRoute, private router: Router, private productService: ProductService) {}
 
   ngOnInit() {
-    this.prodId = parseInt(this.activatedroute.snapshot.params['productId']);
+    this.prodId = this.activatedroute.snapshot.params['productId'];
     this.productService.getProductById(this.prodId).subscribe(
       (data: Product) => this.product = data
     );

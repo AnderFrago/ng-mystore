@@ -8,7 +8,7 @@
             (ngSubmit)="saveProduct()"
             [formGroup]="productForm">
   
-        <div class="form-group row mb-2">
+        <div class="form-group row mb-2" *ngIf="product">
           <label class="col-md-2 col-form-label"
                  for="productNameId">Product Name</label>
           <div class="col-md-8">

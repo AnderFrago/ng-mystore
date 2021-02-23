@@ -85,7 +85,7 @@ var contactSchema = new mongoose.Schema({
 var Product = mongoose.model('products', contactSchema);
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "https://ng-mystore-client.web.app"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Methods", "POST, PUT, GET, DELETE");
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE,OPTIONS');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
@@ -141,13 +141,13 @@ app.post('/products', function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); });
-app.delete('/product/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.delete('/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var product, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Product.findByIdAndDelete(req.params._id)];
+                return [4 /*yield*/, Product.findByIdAndDelete(req.params.id)];
             case 1:
                 product = _a.sent();
                 if (!product)
@@ -162,13 +162,13 @@ app.delete('/product/:id', function (req, res) { return __awaiter(void 0, void 0
         }
     });
 }); });
-app.patch('/product/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.put('/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var product, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, Product.findByIdAndUpdate(req.params._id, req.body)];
+                return [4 /*yield*/, Product.findByIdAndUpdate(req.params.id, req.body)];
             case 1:
                 product = _a.sent();
                 return [4 /*yield*/, Product.save()];

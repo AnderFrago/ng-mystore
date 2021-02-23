@@ -26,23 +26,26 @@ export class ProductService {
     return this.http.get<Product[]>(this.productsUrl)
     .pipe(
       // Get max value from an array
-      map(data => Math.max.apply(Math, data.map(function(o) { return o.id; }))   ),
+     // map(data => Math.max.apply(Math, data.map(function(o) { return o._id; }))   ),
+     map(data => Math.max.apply(Math, data.map(function(o) { return Math.floor(Math.random()*1E16) }))   ),
+     
       catchError(this.handleError)
     );
   }
 
-  getProductById(id: number): Observable<Product> {
+  getProductById(id: string): Observable<Product> {
     const url = `${this.productsUrl}/${id}`;
-    return this.http.get<Product>(url)
-      .pipe(
+      return this.http.get<Product>(url)
+      .pipe(     
         tap(data => console.log('getProduct: ' + JSON.stringify(data))),
         catchError(this.handleError)
       );
+    
   }
 
   createProduct(product: Product): Observable<Product> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    product.id = null;
+    product._id = null;
     return this.http.post<Product>(this.productsUrl, product, { headers: headers })
       .pipe(
         tap(data => console.log('createProduct: ' + JSON.stringify(data))),
@@ -50,7 +53,7 @@ export class ProductService {
       );
   }
 
-  deleteProduct(id: number): Observable<{}> {
+  deleteProduct(id: string): Observable<{}> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.productsUrl}/${id}`;
     return this.http.delete<Product>(url, { headers: headers })
@@ -62,10 +65,10 @@ export class ProductService {
 
   updateProduct(product: Product): Observable<Product> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const url = `${this.productsUrl}/${product.id}`;
+    const url = `${this.productsUrl}/${product._id}`;
     return this.http.put<Product>(url, product, { headers: headers })
       .pipe(
-        tap(() => console.log('updateProduct: ' + product.id)),
+        tap(() => console.log('updateProduct: ' + product._id)),
         // Return the product on an update
         map(() => product),
         catchError(this.handleError)
