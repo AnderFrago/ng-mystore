@@ -38,13 +38,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var mongoose = require('mongoose');
 var express = require('express');
 var bodyParser = require('body-parser');
+// This module allows you to 'wrap' your API for serverless use.
+// No HTTP server, no ports or sockets. 
+// https://github.com/dougmoscrop/serverless-http
+var serverless = require('serverless-http');
 // Connecting to Mongoo Atlas database
 mongoose.connect('mongodb+srv://ander_frago:4Vientos@cluster0.wdu3m.mongodb.net/productsdb?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
 var app = express();
-var contactSchema = new mongoose.Schema({
+var productSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -82,9 +86,11 @@ var contactSchema = new mongoose.Schema({
         trim: true
     },
 });
-var Product = mongoose.model('products', contactSchema);
+//let Product = mongoose.model('products', contactSchema);
+//How to get rid of Error: “OverwriteModelError: Cannot overwrite `undefined` model once compiled.”?
+var Product = mongoose.models.products || mongoose.model('products', productSchema);
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://ng-mystore-client.web.app"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE,OPTIONS');
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -93,7 +99,9 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-app.get('/products', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+var router = express.Router();
+app.use('/.netlify/functions/store-rest-server', router); // path must route to lambda
+router.get('/products', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var products;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -141,7 +149,7 @@ app.post('/products', function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); });
-app.delete('/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.delete('/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var product, err_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -162,7 +170,7 @@ app.delete('/products/:id', function (req, res) { return __awaiter(void 0, void 
         }
     });
 }); });
-app.put('/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+router.put('/products/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var product, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -184,13 +192,5 @@ app.put('/products/:id', function (req, res) { return __awaiter(void 0, void 0, 
         }
     });
 }); });
-/*
-// This is not working with Heroku, IP and PORT are automatically asigned
-const server = app.listen(8000, "localhost", () => {
-  const { address, port } = server.address();
-
-  console.log('Listening on %s %s', address, port);
-});
-*/
-// start the server listening for requests
-app.listen(process.env.PORT || 3000, function () { return console.log("Server is running..."); });
+module.exports = app;
+module.exports.handler = serverless(app);

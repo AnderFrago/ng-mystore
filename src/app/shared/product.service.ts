@@ -10,7 +10,7 @@ import { Product } from './product';
   providedIn: 'root'
 })
 export class ProductService {
-  private productsUrl = 'https://ng-mystore-server.herokuapp.com/products';
+  private productsUrl = '/.netlify/functions/store-rest-server/products';
 
   constructor(private http: HttpClient) { }
 
